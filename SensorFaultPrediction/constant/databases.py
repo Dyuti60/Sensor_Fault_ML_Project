@@ -1,0 +1,2 @@
+DATABASE_NAME='Attendance_Sensor'
+COLLECTION_NAME='Attendance_Sensor_Data'

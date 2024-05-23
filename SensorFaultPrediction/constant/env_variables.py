@@ -1,0 +1,1 @@
+MONGO_URL_KEY= 'mongodb+srv://duttadyuti4:<password>@cluster0.afg5tpr.mongodb.net/'
