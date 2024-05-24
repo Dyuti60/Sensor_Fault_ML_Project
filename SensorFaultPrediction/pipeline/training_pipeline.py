@@ -6,8 +6,8 @@ from SensorFaultPrediction.components.data_ingestion import DataIngestion
 import os, sys
 
 class TrainingPipeline:
-    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
-        self.training_pipeline_config=training_pipeline_config
+    def __init__(self):
+        self.training_pipeline_config=TrainingPipelineConfig()
 
     def start_data_ingestion(self):
         try:
@@ -16,4 +16,10 @@ class TrainingPipeline:
             data_ingestion_artifact=data_ingestion.initiate_data_ingestion()
             return data_ingestion_artifact
         except MLException as e:
+            raise MLException(e,sys)
+        
+    def run_train_pipeline(self):
+        try:
+            data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
+        except Exception as e:
             raise MLException(e,sys)
