@@ -2,3 +2,5 @@ numpy
 pandas
 pymongo
 certifi
+python-dotenv
+scikit-learn

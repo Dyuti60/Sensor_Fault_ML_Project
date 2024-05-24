@@ -1,9 +1,23 @@
 import pymongo
+from dotenv import load_dotenv
 from SensorFaultPrediction.constant.databases import DATABASE_NAME
 from SensorFaultPrediction.constant.env_variables import MONGO_URL_KEY
 import certifi
 import os
+load_dotenv()
 ca = certifi.where()
+
+'''
+Install pymongo and certifi in order to securely connect with mongo client
+Define Class MongoDBClient and initialize 
+
+set mongo_db_url and cerftifi.where()
+if url is having localhost then tlsCAFile is not required else it is required
+
+mongo_db_url needs to be passed on pymongo.MongoClient
+
+initialise client, database
+'''
 
 class MongoDBClient:
     client = None
