@@ -37,7 +37,7 @@ class DataIngestion:
     def read_csv_file_and_export_into_feature_store(self):
         try:
             #os.makedirs(self.data_ingestion_config.data_source_csv_dir_path,exist_ok=True)
-            dataframe=pd.read_csv(os.getcwd()+"\\SensorFaultPrediction\\"+self.DATA_SOURCE_CSV_DIR+"\\"+self.DATA_SOURCE_CSV_FILE_NAME)
+            dataframe=pd.read_csv(os.getcwd()+"\\SensorFaultPrediction\\"+self.DATA_SOURCE_CSV_DIR+"\\"+self.DATA_SOURCE_CSV_FILE_NAME,na_values="na")
             dataframe.reset_index(drop=True, inplace=True)
             feature_store_file_path=self.data_ingestion_config.feature_store_file_path
             dir_path=os.path.dirname(feature_store_file_path)
