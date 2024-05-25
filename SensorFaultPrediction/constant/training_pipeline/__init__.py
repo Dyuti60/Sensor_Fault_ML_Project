@@ -15,14 +15,10 @@ TRAIN_FILE_NAME:str='train.csv'
 TEST_FILE_NAME:str='test.csv'
 DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float=0.2
 DATA_INGESTION_COLLECTION_NAME:str='Attendance_Sensor_Data'
-schema_file_path=os.path.join('config','schema.yaml')
-schema_drop_cols='drop_columns'
-
-
+SCHEMA_FILE_PATH=os.path.join('config','schema.yaml')
+SCHEMA_DROP_COLUMNS='drop_columns'
 
 TARGET_COLUMN:str='class'
-schema_file_path=os.path.join('config','schema.yaml')
-schema_drop_cols='drop_columns'
 
 #Data Validation Constants
 DATA_VALIDATION_DIR='data_validation'

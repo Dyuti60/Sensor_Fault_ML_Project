@@ -5,14 +5,13 @@ import os, sys
 from SensorFaultPrediction.exception import MLException
 from SensorFaultPrediction.logger import logging
 
-# for yaml file, to read yaml.safe_load(file); to write yaml file yaml.dump(file);
-# for numpy array, to save np.save(file, array); to load numpy array np.load(file);
-# for saving object - dill.dump(obj,file); for loading objects - dill.load(obj,file);
-
+# for yaml file, to read yaml.safe_load(file); to write yaml file yaml.dump(file); read_yaml_file returns dict
+# for numpy array, to save np.save(file, array); to load numpy array np.load(file); load_numpy_array returns np.array
+# for saving object - dill.dump(obj,file); for loading objects - dill.load(obj,file); load_object returns object
 def read_yaml_file(file_path:str)->dict:
     try:
         with open(file_path,'rb') as yaml_file:
-            yaml.safe_load(yaml_file)
+            return yaml.safe_load(yaml_file)
     except Exception as e:
         raise MLException(e,sys)
 

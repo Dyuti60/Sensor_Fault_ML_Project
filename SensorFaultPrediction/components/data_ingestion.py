@@ -4,7 +4,9 @@ from SensorFaultPrediction.entity.config_entity import TrainingPipelineConfig
 from SensorFaultPrediction.entity.config_entity import DataIngestionConfig
 from SensorFaultPrediction.entity.artifact_entity import DataIngestionArtifact
 from SensorFaultPrediction.data_source_access.sensor_data import AttendanceSensorData
-from SensorFaultPrediction.constant.training_pipeline import _schema_config
+from SensorFaultPrediction.constant.training_pipeline import SCHEMA_FILE_PATH
+from SensorFaultPrediction.constant.training_pipeline import SCHEMA_DROP_COLUMNS
+from SensorFaultPrediction.utils.mail_utils import read_yaml_file
 from sklearn.model_selection import train_test_split
 import os, sys
 import pandas as pd
@@ -16,6 +18,7 @@ class DataIngestion:
     def __init__(self,data_ingestion_config:DataIngestionConfig):
         try:
             self.data_ingestion_config=data_ingestion_config
+            self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
         except Exception as e:
             raise MLException(e,sys)
 
@@ -59,7 +62,7 @@ class DataIngestion:
         try:
             #dataframe=self.export_data_into_feature_store()
             dataframe=self.read_csv_file_and_export_into_feature_store()
-            dataframe.drop(columns=self._schema_config['drop_columns'],axis=1,inplace=True)
+            dataframe = dataframe.drop(self._schema_config[SCHEMA_DROP_COLUMNS],axis=1)
             self.split_data_as_train_test(dataframe)
             data_ingestion_artifacts=DataIngestionArtifact(train_file_path=self.data_ingestion_config.training_file_path,
                                                            test_file_path=self.data_ingestion_config.testing_file_path)
