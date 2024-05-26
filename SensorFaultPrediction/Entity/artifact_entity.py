@@ -73,12 +73,12 @@ class ModelEvaluatorArtifact:
     In this stage, model is trained and evaluated on different variances
     Output are: is_model_accepted, improved_accuracy, best_model_path, trained_model_path, train_model_metric, best_model_metric
     '''
-    is_model_accepted:bool
-    improved_accuracy:float
-    train_model_path:str
-    train_model_metric:ClassificationMetricArtifact
-    best_model_path:str
-    best_model_metric:ClassificationMetricArtifact
+    is_model_accepted: bool
+    improved_accuracy: float
+    best_model_path: str
+    trained_model_path: str
+    train_model_metric_artifact: ClassificationMetricArtifact
+    best_model_metric_artifact: ClassificationMetricArtifact
 
 @dataclass
 class ModelPusherArtifact:

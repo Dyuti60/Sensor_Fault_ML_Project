@@ -1,25 +1,31 @@
-from SensorFaultPrediction.entity.config_entity import ModelEvaluationConfig
-from SensorFaultPrediction.entity.artifact_entity import ModelEvaluatorArtifact, ModelTrainerArtifact,DataValidationArtifact
 from SensorFaultPrediction.exception import MLException
 from SensorFaultPrediction.logger import logging
-from SensorFaultPrediction.ml.model.estimator import TargetValueMapping,ModelResolver
+from SensorFaultPrediction.entity.artifact_entity import DataValidationArtifact,ModelTrainerArtifact,ModelEvaluatorArtifact
+from SensorFaultPrediction.entity.config_entity import ModelEvaluationConfig
+import os,sys
 from SensorFaultPrediction.ml.metric.classification_metrics import get_classification_score
+from SensorFaultPrediction.ml.model.estimator import SensorModel
+from SensorFaultPrediction.utils.mail_utils import save_object,load_object,write_yaml_file
+from SensorFaultPrediction.ml.model.estimator import ModelResolver
 from SensorFaultPrediction.constant.training_pipeline import TARGET_COLUMN
-from SensorFaultPrediction.utils.mail_utils import load_object,write_yaml_file
-import os, sys
-import pandas as pd
-
+from SensorFaultPrediction.ml.model.estimator import TargetValueMapping
+import pandas  as  pd
 class ModelEvaluation:
-    def __init__(self,model_trainer_artifact:ModelTrainerArtifact,
-                 model_evaluation_config:ModelEvaluationConfig,
-                 data_validation_artifact:DataValidationArtifact):
+
+
+    def __init__(self,model_eval_config:ModelEvaluationConfig,
+                    data_validation_artifact:DataValidationArtifact,
+                    model_trainer_artifact:ModelTrainerArtifact):
+        
         try:
-            self.model_trainer_artifact=model_trainer_artifact
-            self.model_evaluation_config=model_evaluation_config
+            self.model_eval_config=model_eval_config
             self.data_validation_artifact=data_validation_artifact
+            self.model_trainer_artifact=model_trainer_artifact
         except Exception as e:
             raise MLException(e,sys)
-        
+    
+
+
     def initiate_model_evaluation(self)->ModelEvaluatorArtifact:
         try:
             valid_train_file_path = self.data_validation_artifact.valid_train_file_path
@@ -35,9 +41,8 @@ class ModelEvaluation:
             df.drop(TARGET_COLUMN,axis=1,inplace=True)
 
             train_model_file_path = self.model_trainer_artifact.trained_model_file_path
-            
             model_resolver = ModelResolver()
-            is_model_accepted=True
+            is_model_accepted=False
 
             if not model_resolver.is_model_exists():
                 model_evaluation_artifact = ModelEvaluatorArtifact(
@@ -47,25 +52,27 @@ class ModelEvaluation:
                     trained_model_path=train_model_file_path, 
                     train_model_metric_artifact=self.model_trainer_artifact.test_metrics_artifact, 
                     best_model_metric_artifact=None)
+                logging.info(f"Model evaluation artifact: {model_evaluation_artifact}")
                 return model_evaluation_artifact
-            
+
             latest_model_path = model_resolver.get_best_model_path()
             latest_model = load_object(file_path=latest_model_path)
             train_model = load_object(file_path=train_model_file_path)
-
-            y_latest_pred=latest_model.predict(df)
-            y_trained_pred=train_model.predict(df)
+            
+            y_trained_pred = train_model.predict(df)
+            y_latest_pred  =latest_model.predict(df)
 
             trained_metric = get_classification_score(y_true, y_trained_pred)
             latest_metric = get_classification_score(y_true, y_latest_pred)
 
             improved_accuracy = trained_metric.f1_score-latest_metric.f1_score
-
-            if self.model_evaluation_config.changed_threshold < improved_accuracy:
+            if self.model_eval_config.change_threshold < improved_accuracy:
+                #0.02 < 0.03
                 is_model_accepted=True
             else:
                 is_model_accepted=False
 
+            
             model_evaluation_artifact = ModelEvaluatorArtifact(
                     is_model_accepted=is_model_accepted, 
                     improved_accuracy=improved_accuracy, 
@@ -77,7 +84,9 @@ class ModelEvaluation:
             model_eval_report = model_evaluation_artifact.__dict__
 
             #save the report
-            write_yaml_file(self.model_evaluation_config.report_file_path, model_eval_report)
+            write_yaml_file(self.model_eval_config.report_file_path, model_eval_report)
+            logging.info(f"Model evaluation artifact: {model_evaluation_artifact}")
             return model_evaluation_artifact
+            
         except Exception as e:
             raise MLException(e,sys)

@@ -4,6 +4,9 @@ import os
 MODEL_TRAINING_PIPELINE_NAME='training_pipeline'
 ARTIFACT_DIR:str='artifact'
 
+#Model Evaluation Save model
+SAVED_MODEL_DIR =os.path.join("saved_models")
+
 
 
 #Data Ingestion Constants

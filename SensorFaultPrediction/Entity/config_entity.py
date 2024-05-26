@@ -96,10 +96,17 @@ class ModelEvaluationConfig:
     artifact/model_evaluation/
     artifact/model_evaluation/report.yaml
     '''
+
+class ModelEvaluationConfig:
+
     def __init__(self,training_pipeline_config:TrainingPipelineConfig):
-        self.model_evaluation_dir=os.path.join(training_pipeline_config.artifact_dir_name,training_pipeline.MODEL_EVALUATION_DIR)
-        self.report_file_path=os.path.join(self.model_evaluation_dir,training_pipeline.MODEL_EVALUATION_REPORT_NAME)
-        self.changed_threshold=training_pipeline.MODEL_EVALUATION_CHANGED_THRESHOLD
+        self.model_evaluation_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir_name, training_pipeline.MODEL_EVALUATION_DIR
+        )
+        self.report_file_path = os.path.join(self.model_evaluation_dir,training_pipeline.MODEL_EVALUATION_REPORT_NAME)
+        self.change_threshold = training_pipeline.MODEL_EVALUATION_CHANGED_THRESHOLD
+
+
 
 class ModelPusherConfig:
     '''

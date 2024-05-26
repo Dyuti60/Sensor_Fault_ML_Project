@@ -36,7 +36,7 @@ class ModelTrainer:
             #'SVC':SVC(),
             #'KNN Classifier':KNeighborsClassifier(),
             #'Decision Tree Classifier':DecisionTreeClassifier(),
-            'Random Forest Classifier':RandomForestClassifier(),
+            #'Random Forest Classifier':RandomForestClassifier(),
             #'Gradient Boosting Classifier':GradientBoostingClassifier(),
             #'Ada Boost Classifier':AdaBoostClassifier(),
             'XGBoost Classifier':XGBClassifier(),
@@ -108,10 +108,7 @@ class ModelTrainer:
             'Decision Tree Classifier':{},
             'Random Forest Classifier':{},
             'Gradient Boosting Classifier':{},
-            'XGBoost Classifier':{
-                'learning_rate':[.1,.01,.05,.001],
-                'n_estimators': [2,4,9,16,25,36,49,64,81,100]
-            },
+            'XGBoost Classifier':{},
             "CatBoost Classifier":{},
             "Ada Boost Classifier":{}
         }

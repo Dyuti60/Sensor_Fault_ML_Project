@@ -1,11 +1,13 @@
-from SensorFaultPrediction.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainingConfig
-from SensorFaultPrediction.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact, ModelTrainerArtifact
+from SensorFaultPrediction.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainingConfig,ModelEvaluationConfig,ModelPusherConfig
+from SensorFaultPrediction.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact, ModelTrainerArtifact,ModelEvaluatorArtifact,ModelPusherArtifact
 from SensorFaultPrediction.exception import MLException
 from SensorFaultPrediction.logger import logging
 from SensorFaultPrediction.components.data_ingestion import DataIngestion
 from SensorFaultPrediction.components.data_validation import DataValidation
 from SensorFaultPrediction.components.data_transformation import DataTransformation
 from SensorFaultPrediction.components.model_trainer import ModelTrainer
+from SensorFaultPrediction.components.model_evaluation import ModelEvaluation
+from SensorFaultPrediction.components.model_pusher import ModelPusher
 import os, sys
 
 class TrainingPipeline:
@@ -48,11 +50,32 @@ class TrainingPipeline:
         except Exception as e:
             raise MLException(e,sys)
         
+    def start_model_evaluation(self,model_trainer_artifact:ModelTrainerArtifact,data_validation_artifact:DataValidationArtifact):
+        self.model_evaluation_config=ModelEvaluationConfig(training_pipeline_config=self.training_pipeline_config)
+        
+        model_evaluation=ModelEvaluation(model_trainer_artifact=model_trainer_artifact,
+                                         model_eval_config=self.model_evaluation_config,
+                                         data_validation_artifact=data_validation_artifact)
+        model_evaluation_artifact=model_evaluation.initiate_model_evaluation()
+        return model_evaluation_artifact
+        
+    def start_model_pusher(self,model_eval_artifact:ModelEvaluatorArtifact):
+        try:
+            model_pusher_config = ModelPusherConfig(training_pipeline_config=self.training_pipeline_config)
+            model_pusher = ModelPusher(model_pusher_config, model_eval_artifact)
+            model_pusher_artifact = model_pusher.initiate_model_push()
+            return model_pusher_artifact
+        except  Exception as e:
+            raise  MLException(e,sys)
+
     def run_train_pipeline(self):
         try:
             data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
             data_validation_artifact:DataValidationArtifact = self.start_data_validation(data_ingestion_artifact)
             data_transformation_artifact:DataTransformationArtifact = self.start_data_transformation(data_validation_artifact)
             model_trainer_artifact:ModelTrainerArtifact=self.start_model_training(data_transformation_artifact)
+            model_evaluation_artifact:ModelEvaluatorArtifact=self.start_model_evaluation(model_trainer_artifact,data_validation_artifact)
+            model_pusher_artifact:ModelPusherArtifact=self.start_model_pusher(model_evaluation_artifact)
         except Exception as e:
             raise MLException(e,sys)
+        

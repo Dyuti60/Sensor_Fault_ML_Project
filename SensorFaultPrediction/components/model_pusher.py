@@ -15,10 +15,11 @@ class ModelPusher:
         
     def initiate_model_push(self)->ModelPusherArtifact:
         try:
-            trained_model_path = self.model_evaluation_artifact.train_model_path
+            trained_model_path = self.model_evaluation_artifact.trained_model_path
             
             #Creating model pusher dir to save model from trained model path
             model_file_path = self.model_pusher_config.model_file_path
+            print(model_file_path)
             os.makedirs(os.path.dirname(model_file_path),exist_ok=True)
             shutil.copy(src=trained_model_path, dst=model_file_path)
 
@@ -28,7 +29,7 @@ class ModelPusher:
             shutil.copy(src=trained_model_path, dst=saved_model_path)
 
             #prepare artifact
-            model_pusher_artifact = ModelPusherArtifact(saved_model_path=saved_model_path, model_file_path=model_file_path)
+            model_pusher_artifact = ModelPusherArtifact(saved_model_file_path=saved_model_path, model_file_path=model_file_path)
             return model_pusher_artifact
         except  Exception as e:
             raise MLException(e, sys)
