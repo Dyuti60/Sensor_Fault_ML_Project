@@ -35,6 +35,8 @@ PREPROCESSING_OBJECT_FILE_PATH='preprocessing.pkl'
 
 #Model Training Constants
 MODEL_TRAINED_DIR:str = 'model_trained'
+MODEL_TRAINING_REPORT_DIR:str='model_training_metrics'
+MODEL_TRAINING_REPORT_FILE_NAME:str='model_training_metrics_report.csv'
 MODEL_TRAINER_TRAINED_MODEL_DIR:str = 'model_trainer'
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = 'model.pkl'
 MODEL_TRAINER_EXPECTED_SCORE: float = 0.6

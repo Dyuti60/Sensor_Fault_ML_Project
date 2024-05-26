@@ -83,6 +83,8 @@ class ModelTrainingConfig:
     '''
     def __init__(self,training_pipeline_config:TrainingPipelineConfig):
         self.model_trained_dir=os.path.join(training_pipeline_config.artifact_dir_name,training_pipeline.MODEL_TRAINED_DIR)
+        self.model_training_report_dir=os.path.join(self.model_trained_dir,training_pipeline.MODEL_TRAINING_REPORT_DIR)
+        self.model_training_report_file_path=os.path.join(self.model_training_report_dir,training_pipeline.MODEL_TRAINING_REPORT_FILE_NAME)
         self.model_trained_object_file_path=os.path.join(self.model_trained_dir,training_pipeline.MODEL_TRAINER_TRAINED_MODEL_DIR,training_pipeline.MODEL_TRAINER_TRAINED_MODEL_NAME)
         self.expected_accuracy:float=training_pipeline.MODEL_TRAINER_EXPECTED_SCORE
         self.overfitting_underfitting_threshold:float=training_pipeline.MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD

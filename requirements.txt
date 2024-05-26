@@ -7,3 +7,5 @@ scikit-learn
 pyyaml
 dill
 imbalanced-learn
+xgboost
+catboost

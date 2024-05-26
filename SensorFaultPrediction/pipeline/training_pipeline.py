@@ -1,10 +1,11 @@
-from SensorFaultPrediction.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig,DataValidationConfig,DataTransformationConfig
-from SensorFaultPrediction.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact
+from SensorFaultPrediction.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainingConfig
+from SensorFaultPrediction.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact, ModelTrainerArtifact
 from SensorFaultPrediction.exception import MLException
 from SensorFaultPrediction.logger import logging
 from SensorFaultPrediction.components.data_ingestion import DataIngestion
 from SensorFaultPrediction.components.data_validation import DataValidation
 from SensorFaultPrediction.components.data_transformation import DataTransformation
+from SensorFaultPrediction.components.model_trainer import ModelTrainer
 import os, sys
 
 class TrainingPipeline:
@@ -38,10 +39,20 @@ class TrainingPipeline:
         except Exception as e:
             raise MLException(e,sys)
         
+    def start_model_training(self,data_transformation_artfact:DataTransformationArtifact):
+        try:
+            self.model_trainer_config=ModelTrainingConfig(training_pipeline_config=self.training_pipeline_config)
+            model_trainer=ModelTrainer(model_trainer_config=self.model_trainer_config,data_transformation_artifact=data_transformation_artfact)
+            model_trainer_artifact=model_trainer.initiate_model_training()
+            return model_trainer_artifact
+        except Exception as e:
+            raise MLException(e,sys)
+        
     def run_train_pipeline(self):
         try:
             data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
             data_validation_artifact:DataValidationArtifact = self.start_data_validation(data_ingestion_artifact)
             data_transformation_artifact:DataTransformationArtifact = self.start_data_transformation(data_validation_artifact)
+            model_trainer_artifact:ModelTrainerArtifact=self.start_model_training(data_transformation_artifact)
         except Exception as e:
             raise MLException(e,sys)
