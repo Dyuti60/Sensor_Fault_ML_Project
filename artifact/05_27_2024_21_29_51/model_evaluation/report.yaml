@@ -1,0 +1,10 @@
+best_model_f1_score: 0.8022598870056498
+best_model_precision_score: 0.7580071174377224
+best_model_recall_score: 0.852
+improved_accuracy: 0.009334315892901013
+is_model_accepted: false
+latest_model_path: SAVED_MODEL\1716824941\model.pkl
+train_f1_score: 0.8115942028985508
+train_precision_score: 0.762071992976295
+train_recall_score: 0.868
+trained_model_path: artifact\05_27_2024_21_29_51\model_trained\model_trainer\model.pkl

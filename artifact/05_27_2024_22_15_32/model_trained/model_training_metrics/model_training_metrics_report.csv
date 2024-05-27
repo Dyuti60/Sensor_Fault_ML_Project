@@ -1,0 +1,2 @@
+Model Name,Model Best Parameter,Model Score Test,Model Score Train,Model Score Variance
+XGBoost Classifier,"{'learning_rate': 0.1, 'n_estimators': 100}",0.9999285663261661,0.9994295493439818,0.0004990169821843526

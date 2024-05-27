@@ -36,7 +36,7 @@ class ModelTrainer:
             #'SVC':SVC(),
             #'KNN Classifier':KNeighborsClassifier(),
             #'Decision Tree Classifier':DecisionTreeClassifier(),
-            'Random Forest Classifier':RandomForestClassifier(),
+            #'Random Forest Classifier':RandomForestClassifier(),
             #'Gradient Boosting Classifier':GradientBoostingClassifier(),
             #'Ada Boost Classifier':AdaBoostClassifier(),
             'XGBoost Classifier':XGBClassifier(),

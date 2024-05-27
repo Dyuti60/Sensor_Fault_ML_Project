@@ -17,6 +17,7 @@ class TrainingPipeline:
     is_pipeline_running=False
     def __init__(self):
         self.training_pipeline_config=TrainingPipelineConfig()
+        self.S3_Syncer=S3Syncer()
 
     def start_data_ingestion(self):
         try:
@@ -76,7 +77,8 @@ class TrainingPipeline:
         try:
             aws_key_url=f"s3://{TRAINING_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestamp}"
             folder=self.training_pipeline_config.artifact_dir_name
-            S3Syncer.load_to_s3(aws_key_url,folder)
+            self.S3_Syncer.load_to_s3(aws_buket_url=aws_key_url,folder=folder)
+            
         except Exception as e:
             raise MLException(e,sys)
 
@@ -84,7 +86,7 @@ class TrainingPipeline:
         try:
             aws_key_url=f"s3://{TRAINING_BUCKET_NAME}/saved_model/{SAVED_MODEL_DIR}"
             folder=SAVED_MODEL_DIR
-            S3Syncer.load_to_s3(aws_key_url,folder)
+            self.S3_Syncer.load_to_s3(aws_buket_url=aws_key_url,folder=folder)
         except Exception as e:
             raise MLException(e,sys)
 
@@ -105,5 +107,6 @@ class TrainingPipeline:
             self.sync_saved_model_dir_to_s3()
         except Exception as e:
             TrainingPipeline.is_pipeline_running=False
+            self.sync_artifact_dir_to_s3()
             raise MLException(e,sys)
         
