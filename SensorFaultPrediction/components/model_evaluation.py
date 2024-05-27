@@ -42,8 +42,10 @@ class ModelEvaluation:
 
             train_model_file_path = self.model_trainer_artifact.trained_model_file_path
             model_resolver = ModelResolver()
-            is_model_accepted=False
-
+            is_model_accepted=True
+            print(model_resolver.is_model_exists())
+            print()
+            print(model_resolver.get_best_model_path())
             if not model_resolver.is_model_exists():
                 model_evaluation_artifact = ModelEvaluatorArtifact(
                     is_model_accepted=is_model_accepted, 
@@ -81,7 +83,19 @@ class ModelEvaluation:
                     train_model_metric_artifact=trained_metric, 
                     best_model_metric_artifact=latest_metric)
 
-            model_eval_report = model_evaluation_artifact.__dict__
+            model_eval_report = {}
+            model_eval_report.update({
+            'is_model_accepted':is_model_accepted,
+            'improved_accuracy':float(improved_accuracy),
+            'latest_model_path':str(latest_model_path),
+            'trained_model_path':str(train_model_file_path),
+            'train_f1_score':float(trained_metric.f1_score),
+            'best_model_f1_score':float(latest_metric.f1_score),
+            'train_precision_score':float(trained_metric.precision_score),
+            'best_model_precision_score':float(latest_metric.precision_score),
+            'train_recall_score':float(trained_metric.recall_score),
+            'best_model_recall_score':float(latest_metric.recall_score)
+            })
 
             #save the report
             write_yaml_file(self.model_eval_config.report_file_path, model_eval_report)

@@ -11,6 +11,7 @@ from SensorFaultPrediction.components.model_pusher import ModelPusher
 import os, sys
 
 class TrainingPipeline:
+    is_pipeline_running=False
     def __init__(self):
         self.training_pipeline_config=TrainingPipelineConfig()
 
@@ -70,12 +71,17 @@ class TrainingPipeline:
 
     def run_train_pipeline(self):
         try:
+            TrainingPipeline.is_pipeline_running=True
             data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
             data_validation_artifact:DataValidationArtifact = self.start_data_validation(data_ingestion_artifact)
             data_transformation_artifact:DataTransformationArtifact = self.start_data_transformation(data_validation_artifact)
             model_trainer_artifact:ModelTrainerArtifact=self.start_model_training(data_transformation_artifact)
             model_evaluation_artifact:ModelEvaluatorArtifact=self.start_model_evaluation(model_trainer_artifact,data_validation_artifact)
+            #if not model_evaluation_artifact.is_model_accepted:
+            #    raise Exception("Trained model is not better than the best model")
             model_pusher_artifact:ModelPusherArtifact=self.start_model_pusher(model_evaluation_artifact)
+            TrainingPipeline.is_pipeline_running=False
         except Exception as e:
+            TrainingPipeline.is_pipeline_running=False
             raise MLException(e,sys)
         
