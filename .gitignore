@@ -2,7 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+############
+artifact/
 
+############
 # C extensions
 *.so
 # Distribution / packaging
@@ -126,8 +129,13 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+artifact/
+.artifact
+logs/
+.logs
 
-
+SAVED_MODEL/
+.SAVED_MODEL
 # Spyder project settings
 .spyderproject
 .spyproject
