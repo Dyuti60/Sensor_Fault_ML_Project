@@ -1,0 +1,3 @@
+Model Name,Model Best Parameter,Model Score Test,Model Score Train,Model Score Variance
+Random Forest Classifier,{},1.0,0.9990738761843699,0.0009261238156300644
+XGBoost Classifier,"{'learning_rate': 0.1, 'n_estimators': 100}",0.9999288711857174,0.9996440014239943,0.0002848697617230389
