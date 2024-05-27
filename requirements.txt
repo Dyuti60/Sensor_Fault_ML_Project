@@ -11,3 +11,5 @@ xgboost
 catboost
 fastapi
 awscli
+pendulum
+apache-airflow
