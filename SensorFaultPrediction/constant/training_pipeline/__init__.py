@@ -3,6 +3,7 @@ import os
 #Training Pipeline:
 MODEL_TRAINING_PIPELINE_NAME='training_pipeline'
 ARTIFACT_DIR:str='artifact'
+TRAINING_BUCKET_NAME:str=''
 
 #Model Evaluation Save model
 SAVED_MODEL_DIR =os.path.join("SAVED_MODEL")
