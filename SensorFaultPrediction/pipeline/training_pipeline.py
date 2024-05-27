@@ -101,6 +101,8 @@ class TrainingPipeline:
             #    raise Exception("Trained model is not better than the best model")
             model_pusher_artifact:ModelPusherArtifact=self.start_model_pusher(model_evaluation_artifact)
             TrainingPipeline.is_pipeline_running=False
+            self.sync_artifact_dir_to_s3()
+            self.sync_saved_model_dir_to_s3()
         except Exception as e:
             TrainingPipeline.is_pipeline_running=False
             raise MLException(e,sys)
