@@ -36,7 +36,7 @@ class ModelTrainer:
             #'SVC':SVC(),
             #'KNN Classifier':KNeighborsClassifier(),
             #'Decision Tree Classifier':DecisionTreeClassifier(),
-            #'Random Forest Classifier':RandomForestClassifier(),
+            'Random Forest Classifier':RandomForestClassifier(),
             #'Gradient Boosting Classifier':GradientBoostingClassifier(),
             #'Ada Boost Classifier':AdaBoostClassifier(),
             'XGBoost Classifier':XGBClassifier(),
@@ -106,7 +106,12 @@ class ModelTrainer:
             'SVC':{},
             'KNN Classifier':{},
             'Decision Tree Classifier':{},
-            'Random Forest Classifier':{},
+            'Random Forest Classifier':{
+                'criterion':['gini', 'entropy', 'log_loss'],
+                'n_estimators':[2,4,9,16,25,36,49,64,81,100],
+                'max_features':['sqrt','log2'],
+                'ccp_alpha':[1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0],
+            },
             'Gradient Boosting Classifier':{},
             'XGBoost Classifier':{
                 'learning_rate':[.1,.01,.05,.001],
