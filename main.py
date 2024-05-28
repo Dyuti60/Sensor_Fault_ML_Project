@@ -47,7 +47,7 @@ def main():
     
 if __name__ == '__main__':
     main()
-    app_run(app,host=APP_HOST, port=APP_PORT)
+    #app_run(app,host=APP_HOST, port=APP_PORT)
 
 #pendulum
 #apache-airflow
