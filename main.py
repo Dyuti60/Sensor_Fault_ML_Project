@@ -46,5 +46,6 @@ def main():
         raise MLException(e,sys)
     
 if __name__ == '__main__':
-    main()
+    print(os.path.join(os.getcwd()+'aps_failure_training_set1.csv'))
+    #main()
     app_run(app,host=APP_HOST, port=APP_PORT)
